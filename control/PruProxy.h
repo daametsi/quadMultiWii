@@ -15,7 +15,7 @@ public :
 	// update input, call this method before using Input1 to Input4
 	bool UpdateInput();
 	// Init the output pulse width and set low value
-	bool InitOutput();	
+	bool InitOutput();
 	// update output, call this method after updating Output1 to Output4
 	bool UpdateOutput();
 	// load Image file to Pru0, the image will not run until ResetPru0 is called
@@ -41,6 +41,6 @@ private:
 	bool Enabled;	// flag for if the pru is enabled 
 	// load image file
 	bool LoadImage(unsigned long addr, char * filename);
-	
+
 };
 #endif

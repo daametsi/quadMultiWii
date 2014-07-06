@@ -157,11 +157,11 @@ bool MPU6050::Calibrate()
 		}else
 		//if((buf2[0] & 0x8 )== 0x8)	// new set of data is available
 		{
-			unsigned char x2[2] = {buf2[0], buf2[1]};
+			unsigned char x2[2] = {buf2[1], buf2[2]};
 			memcpy(&x1, x2, 2);
-			unsigned char y2[2] = {buf2[2], buf2[3]};
+			unsigned char y2[2] = {buf2[3], buf2[4]};
 			memcpy(&y1, y2, 2);
-			unsigned char z2[2] = {buf2[4], buf2[5]};
+			unsigned char z2[2] = {buf2[5], buf2[6]};
 			memcpy(&z1, z2, 2);
 			m_xOffset += x1;
 			m_yOffset += y1;
@@ -211,11 +211,11 @@ bool MPU6050::UpdateData()
 	//if((buf2[0] & 0x8) == 0x8)
 	{
 		short x1, y1, z1;
-		unsigned char x2[2] = {buf2[1], buf2[2]};
+		unsigned char x2[2] = {buf2[0], buf2[1]};
 		memcpy(&x1, x2, 2);
-		unsigned char y2[2] = {buf2[3], buf2[4]};
+		unsigned char y2[2] = {buf2[2], buf2[3]};
 		memcpy(&y1, y2, 2);
-		unsigned char z2[2] = {buf2[5], buf2[6]};
+		unsigned char z2[2] = {buf2[4], buf2[5]};
 		memcpy(&z1, z2, 2);
 
 		x1 = x1 - m_xOffset;

@@ -74,7 +74,7 @@
 #define SONAR 0
 #define GPS 0
 #define BARO 0
-#define ACC 1	
+#define ACC 1
 
 // default POSHOLD control gains
 #define POSHOLD_P              .11

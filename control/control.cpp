@@ -682,7 +682,7 @@ void *SensorThread( void * )
 			temp[0] = sensor.Gyro.x;
 			temp[1] = sensor.Gyro.y;
 			temp[2] = sensor.Gyro.z;
-			//printf("x: %d, y: %d, z: %d\n",sensor.Gyro.x, sensor.Gyro.y, sensor.Gyro.z);
+			//printf("GYRO= x: %d, y: %d, z: %d\n",sensor.Gyro.x, sensor.Gyro.y, sensor.Gyro.z);
 			int axis = 0;
 			for(axis = 0; axis < 3; axis ++)
 			{
@@ -702,7 +702,7 @@ void *SensorThread( void * )
 		{
 			if(sensor.Gyro.UpdateAcc())
 			{
-				printf("x: %d, y: %d, z: %d\n",sensor.Gyro.xAC, sensor.Gyro.yAC, sensor.Gyro.zAC);
+				//printf("ACCEL= x: %d, y: %d, z: %d\n",sensor.Gyro.xAC, sensor.Gyro.yAC, sensor.Gyro.zAC);
 				sysInfo.AccRead ++;
 				sysInfo.accADC[0] = sensor.Gyro.xAC;
 				sysInfo.accADC[1] = sensor.Gyro.yAC;

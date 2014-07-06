@@ -20,7 +20,7 @@ struct SystemVaribles
 	 long  AltHold;
 	 short  errorAltitudeI;
 	 short  debug[4];
-	  
+
 	//for log
 	 long cycleTimeMax;       // highest ever cycle timen
 	 long cycleTimeMin;   // lowest ever cycle timen
@@ -77,12 +77,12 @@ struct SystemVaribles
 	short motor[8];
 	unsigned char dynP8[3], dynD8[3];
 	int gyroRead;	// reading count of gyro
-	int gyroFail;	// failure reading of gyro	 
+	int gyroFail;	// failure reading of gyro
 	int AccRead;	// reading count of accelarator
-	int AccFail;	// failure reading of accelarator	 
-	unsigned long framerate;	
-	
-	unsigned long calibratedAccTime;	
+	int AccFail;	// failure reading of accelarator
+	unsigned long framerate;
+
+	unsigned long calibratedAccTime;
 } ;
 
 struct GPS_Common_Variables
@@ -110,7 +110,7 @@ struct GPS_Common_Variables
 };
 
 
-struct flags_struct 
+struct flags_struct
 {
 	unsigned char OK_TO_ARM :1 ;
 	unsigned char ARMED :1 ;
@@ -148,7 +148,7 @@ public:
 	unsigned char angleTrim[2];
 	unsigned char activate[CHECKBOXITEMS];
 	unsigned char powerTrigger1;
-	
+
 	// load from file
 	bool LoadFromFile(char * filename);
 	// save config to file
@@ -157,10 +157,10 @@ public:
 	void LoadDefault();
 	// dump Config
 	void Dump();
-	
+
 	// construct
 	Config();
-	
+
 } ;
 
 

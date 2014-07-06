@@ -76,16 +76,31 @@ bool PruProxy::Init()
 }
 
 // update input
+//
+// Input1 P8_39 Offset 0b8
+// Input2 P8_40 Offset 0bc
+// Input3 P8_41 Offset 0b0
+// Input4 P8_42 Offset 0b4
+// Input5 P8_43 Offset 0a8
+// Input6 P8_44 Offset 0ac
+//
+// Input1 P8_27 Offset 0b8 Abs 0x8e0
+// Input2 P8_28 Offset 0bc Abs 0x8e8
+// Input3 P8_29 Offset 0b0 Abs 0x8e4
+// Input4 P9_24 Offset 0b4 Abs 0x984
+// Input5 P9_26 Offset 0a8 Abs 0x980
+// Input6 P9_27 Offset 0ac Abs 0x9a4
+//
 bool PruProxy::UpdateInput()
 {
 	if(Enabled)
 	{
-		Input1 = (*(unsigned long *)(sharedMem + 0x114))/200;
-		Input2 = (*(unsigned long *)(sharedMem + 0x124)/200);
-		Input3 = (*(unsigned long *)(sharedMem + 0x134)/200);
-		Input4 = (*(unsigned long *)(sharedMem + 0x144)/200);
-		Input5 = (*(unsigned long *)(sharedMem + 0x154)/200);
-		Input6 = (*(unsigned long *)(sharedMem + 0x164)/200);
+		Input1 = (*(unsigned long *)(0x8e0)/200);
+		Input2 = (*(unsigned long *)(0x8e8)/200);
+		Input3 = (*(unsigned long *)(0x8e4)/200);
+		Input4 = (*(unsigned long *)(0x984)/200);
+		Input5 = (*(unsigned long *)(0x980)/200);
+		Input6 = (*(unsigned long *)(0x9a4)/200);
 		// if(Input1 > 2000 || Input1 < 1000)
 		// {
 			// Input1 = 1050;
@@ -109,24 +124,24 @@ bool PruProxy::UpdateInput()
 
 // Init Output, set the esc to low throttle value as 1000
 // set pulse width as 20 ms
-// S1	pin 29		REAR_R		S4
-// S2	pin 30		FRONT_R		S3
-// S3	pin 27		READ)L		S2
-// S4 	pin 28 		FRONT_L		S1
+// S1	pin 11		REAR_R		S4	0x034
+// S2	pin 12		FRONT_R		S3	0x030
+// S3	pin 15		READ)L		S2	0x03c
+// S4 	pin 16 		FRONT_L		S1	0x038
 // Pin 20 21 won't work as it is high when reboot, esc wont' work
 bool PruProxy::InitOutput()
 {
 	if(Enabled)
 	{
-		*(unsigned long *)(sharedMem + 0x240) = 1000 * 200;
-		*(unsigned long *)(sharedMem + 0x250) = 1000 * 200;
-		*(unsigned long *)(sharedMem + 0x220) = 1000 * 200;
-		*(unsigned long *)(sharedMem + 0x230) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x52) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x48) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x60) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x56) = 1000 * 200;
 
-		*(unsigned long *)(sharedMem + 0x244) = 5000 * 200;
-		*(unsigned long *)(sharedMem + 0x254) = 5000 * 200;
-		*(unsigned long *)(sharedMem + 0x224) = 5000 * 200;
-		*(unsigned long *)(sharedMem + 0x234) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x56) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x52) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x64) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x60) = 5000 * 200;
 
 	}
 	return true;
@@ -136,10 +151,10 @@ bool PruProxy::UpdateOutput()
 {
 	if(Enabled)
 	{
-		*(unsigned long *)(sharedMem + 0x240) = Output1;
-		*(unsigned long *)(sharedMem + 0x250) = Output2;
-		*(unsigned long *)(sharedMem + 0x220) = Output3;
-		*(unsigned long *)(sharedMem + 0x230) = Output4;
+		*(unsigned long *)(sharedMem + 0x52) = Output1;
+		*(unsigned long *)(sharedMem + 0x48) = Output2;
+		*(unsigned long *)(sharedMem + 0x60) = Output3;
+		*(unsigned long *)(sharedMem + 0x56) = Output4;
 
 	}
 	return true;
