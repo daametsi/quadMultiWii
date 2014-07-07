@@ -679,6 +679,7 @@ void *SensorThread( void * )
 		j ++;
 		if(sensor.Gyro.UpdateData())
 		{
+			printf("gyro read");
 			temp[0] = sensor.Gyro.x;
 			temp[1] = sensor.Gyro.y;
 			temp[2] = sensor.Gyro.z;
@@ -701,6 +702,7 @@ void *SensorThread( void * )
 		{
 			if(sensor.Gyro.UpdateAcc())
 			{
+				printf("accel read");
 				sysInfo.AccRead ++;
 				sysInfo.accADC[0] = sensor.Gyro.xAC;
 				sysInfo.accADC[1] = sensor.Gyro.yAC;

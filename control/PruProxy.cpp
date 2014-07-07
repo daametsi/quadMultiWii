@@ -16,7 +16,7 @@ using namespace std;
 PruProxy::PruProxy()
 {
 	Enabled = true;
-	mem_fd = -1;	
+	mem_fd = -1;
 }
 
 PruProxy::~PruProxy()
@@ -43,21 +43,21 @@ bool PruProxy::Init()
 	Input4 = 1500;
 	Input5 = 1500;
 	Input6 = 1500;
-	
+
 	if(Enabled)
 	{
 
-		
-		/* open the device */	
+
+		/* open the device */
 		// map the device and init the varible before use it
 		mem_fd = open("/dev/mem", O_RDWR);
 		if (mem_fd < 0) {
 			printf("Failed to open /dev/mem (%s)\n", strerror(errno));
 			return false;
-		}	
-		
+		}
+
 		LoadImageToPru0("ReadPwmPru0.bin");
-		LoadImageToPru1("PwmOutPru1.bin");		
+		LoadImageToPru1("PwmOutPru1.bin");
 
 		/* map the shared memory */
 		sharedMem = mmap(0, 0x400, PROT_WRITE | PROT_READ, MAP_SHARED, mem_fd, 0x4a310000);
@@ -67,10 +67,10 @@ bool PruProxy::Init()
 			return false;
 		}
 		InitOutput();
-		
+
 		RunPru0();
-		RunPru1();	
-		
+		RunPru1();
+
 	}
    return true;
 }
@@ -104,7 +104,7 @@ bool PruProxy::UpdateInput()
 		// }
 	}
 	return true;
-	
+
 }
 
 // Init Output, set the esc to low throttle value as 1000
@@ -122,12 +122,12 @@ bool PruProxy::InitOutput()
 		*(unsigned long *)(sharedMem + 0x250) = 1000 * 200;
 		*(unsigned long *)(sharedMem + 0x220) = 1000 * 200;
 		*(unsigned long *)(sharedMem + 0x230) = 1000 * 200;
-		
+
 		*(unsigned long *)(sharedMem + 0x244) = 5000 * 200;
 		*(unsigned long *)(sharedMem + 0x254) = 5000 * 200;
 		*(unsigned long *)(sharedMem + 0x224) = 5000 * 200;
 		*(unsigned long *)(sharedMem + 0x234) = 5000 * 200;
-	
+
 	}
 	return true;
 }
@@ -140,7 +140,7 @@ bool PruProxy::UpdateOutput()
 		*(unsigned long *)(sharedMem + 0x250) = Output2;
 		*(unsigned long *)(sharedMem + 0x220) = Output3;
 		*(unsigned long *)(sharedMem + 0x230) = Output4;
-	
+
 	}
 	return true;
 }
@@ -209,7 +209,7 @@ bool PruProxy::WriteUInt32(unsigned long addr, unsigned long data)
 		/* Initialize example */
 		/* map the shared memory */
 		void * pMem = mmap(0, 0x2000, PROT_WRITE | PROT_READ, MAP_SHARED, mem_fd, addr);
-		if (pMem == NULL) 
+		if (pMem == NULL)
 		{
 			printf("Failed to map the device (%s)\n", strerror(errno));
 			close(mem_fd);
@@ -217,9 +217,9 @@ bool PruProxy::WriteUInt32(unsigned long addr, unsigned long data)
 		}
 		*(unsigned long *)(pMem) = data;
 		cout << "write data to memory" << endl;
-		munmap(pMem, 0x2000);	
+		munmap(pMem, 0x2000);
 		return true;
-	
+
 	}
 	return true;
 }
@@ -232,7 +232,7 @@ bool PruProxy::ReadUInt32(unsigned long addr, unsigned long & data)
 		/* Initialize example */
 		/* map the shared memory */
 		void * pMem = mmap(0, 0x4, PROT_WRITE | PROT_READ, MAP_SHARED, mem_fd, addr);
-		if (pMem == NULL) 
+		if (pMem == NULL)
 		{
 			printf("Failed to map the device (%s)\n", strerror(errno));
 			close(mem_fd);
@@ -240,7 +240,7 @@ bool PruProxy::ReadUInt32(unsigned long addr, unsigned long & data)
 		}
 		data = *(unsigned long *)(pMem);
 		cout << "read data to memory" << endl;
-		munmap(pMem, 0x4);	
+		munmap(pMem, 0x4);
 		return true;
 	}
 	return true;
@@ -252,7 +252,7 @@ bool PruProxy::LoadImage(unsigned long addr, char * filename)
 	if(Enabled)
 	{
 		FILE *fPtr;
-		
+
 		// Open an File from the hard drive
 		fPtr = fopen(filename, "rb");
 		if (fPtr == NULL) {
@@ -264,7 +264,7 @@ bool PruProxy::LoadImage(unsigned long addr, char * filename)
 		fseek(fPtr, 0, SEEK_END);
 		// read file
 		unsigned char fileDataArray[PRUSS_MAX_IRAM_SIZE];
-		int fileSize = 0;		
+		int fileSize = 0;
 		fileSize = ftell(fPtr);
 
 		if (fileSize == 0) {
@@ -278,7 +278,7 @@ bool PruProxy::LoadImage(unsigned long addr, char * filename)
 		if (fileSize !=
 			fread((unsigned char *) fileDataArray, 1, fileSize, fPtr)) {
 			printf("WARNING: File Size mismatch\n");
-		}	
+		}
 		fclose(fPtr);
 		/* Initialize example */
 		/* map the shared memory */
@@ -294,9 +294,9 @@ bool PruProxy::LoadImage(unsigned long addr, char * filename)
 			*(p + i) = fileDataArray[i];
 		}
 		cout << "write file to memory" << endl;
-		munmap(pMem, 0x2000);	
+		munmap(pMem, 0x2000);
 		return true;
-	
+
 	}
 	return true;
 }

@@ -1,11 +1,11 @@
 #all: 
-#	g++ control.cpp dumpData.cpp itg3200.cpp PruProxy.cpp -o control
+#	g++ control.cpp dumpData.cpp mpu6050.cpp PruProxy.cpp -o control
 
 CC=g++
 CFLAGS=-c -w
 #CFLAGS=
 LDFLAGS= 
-SOURCES=control.cpp dumpData.cpp sensor.cpp itg4200.cpp PruProxy.cpp misc.cpp config.cpp adxl345.cpp gpio.cpp
+SOURCES=control.cpp dumpData.cpp sensor.cpp mpu6050.cpp PruProxy.cpp misc.cpp config.cpp gpio.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=control
 

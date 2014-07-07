@@ -40,8 +40,8 @@ int read_bytes = 1;
 
 
 
-// init itg3200
-bool ITG4200::Init(int _file) {
+// init mpu6050
+bool MPU6050::Init(int _file) {
 	file = _file;
 
 	bool r = false;
