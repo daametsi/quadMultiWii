@@ -10,7 +10,7 @@
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <iostream>;
-#include "itg4200.h"
+#include "mpu6050.h"
 #include "adxl345.h"
 #include "sensor.h"
 
@@ -39,7 +39,7 @@ bool Sensor::i2c_bus_init() {
 	return r;
 }
 
-// init itg3200
+// init mpu6050
 bool Sensor::Init() {
 	if(i2c_bus_init())
 	{

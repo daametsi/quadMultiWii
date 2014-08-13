@@ -49,7 +49,7 @@ void initSysVari(SystemVaribles &s)
 	 s.armed = 0;
 	 s.BaroPID = 0;
 	 s.errorAltitudeI = 0;
-	  
+
 	//for log
 	 s.cycleTimeMax = 0;       // highest ever cycle timen
 	 s.cycleTimeMin = 65535;   // lowest ever cycle timen
@@ -90,9 +90,9 @@ void initSysVari(SystemVaribles &s)
 	s.angle[1] = 0;   // absolute angle inclination in multiple of 0.1 degree    180 deg = 1800
 	 s.smallAngle25 = 1;
 	 s.gyroRead = 0;	// reading count of gyro
-	 s.gyroFail = 0;	// failure reading of gyro	 
+	 s.gyroFail = 0;	// failure reading of gyro
 	 s.AccRead = 0;	// reading count of accelarator
-	s.AccFail = 0;	// failure reading of accelarator	
+	s.AccFail = 0;	// failure reading of accelarator
 
 }
 
@@ -140,11 +140,11 @@ unsigned int min(unsigned int a, unsigned int b)
 
 #define QUADX
  #define MULTITYPE 3
-  
 
 
 
-void setup() 
+
+void setup()
 {
 	initStopTimer();
 	if(conf.LoadFromFile(SETTINGFILE))
@@ -166,14 +166,14 @@ void setup()
 	{
 		cout << "sensor init failed. " << endl;
 	}
-	
-	
+
+
 	sysInfo.armed=0;
-	
+
 	for(int i=0;i<6;i++)
 	{
 		sysInfo.lookupRX[i] = (2500 + conf.rcExpo8*(i*i-25)) * i * (long)conf.rcRate8/2500;
-	}	
+	}
   // SerialOpen(0,115200);
   // LEDPIN_PINMODE;
   // POWERPIN_PINMODE;
@@ -207,8 +207,8 @@ int PIDMIX(int X, int Y, int Z)
 {
 	return sysInfo.rcCommand[THROTTLE] + sysInfo.axisPID[ROLL]*X + sysInfo.axisPID[PITCH]*Y + YAW_DIRECTION * sysInfo.axisPID[YAW]*Z;
 }
-  
-void mixTable() 
+
+void mixTable()
 {
 	sysInfo.motor[0] = PIDMIX(-1,+1,-1); //REAR_R
 	sysInfo.motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
@@ -218,18 +218,18 @@ void mixTable()
 	int maxMotor=sysInfo.motor[0];
 	for(int i=1;i< NUMBER_MOTOR;i++)
 	{
-		if (sysInfo.motor[i]>maxMotor) 
-		{	
+		if (sysInfo.motor[i]>maxMotor)
+		{
 			maxMotor=sysInfo.motor[i];
 		}
 	}
-	for (int i = 0; i < NUMBER_MOTOR; i++) 
+	for (int i = 0; i < NUMBER_MOTOR; i++)
 	{
 		if (maxMotor > MAXTHROTTLE) // this is a way to still have good gyro corrections if at least one motor reaches its max.
 		{
 			sysInfo.motor[i] -= maxMotor - MAXTHROTTLE;
 		}
-		sysInfo.motor[i] = constrain(sysInfo.motor[i], MINTHROTTLE, MAXTHROTTLE);    
+		sysInfo.motor[i] = constrain(sysInfo.motor[i], MINTHROTTLE, MAXTHROTTLE);
 		if ((sysInfo.rcData[THROTTLE]) < MINCHECK)
 		{
 			#ifndef MOTOR_STOP
@@ -255,7 +255,7 @@ void annexCode() { //this code is excetuted at each loop and won't interfere wit
   if      (sysInfo.rcData[THROTTLE]<1500) prop2 = 100;
   else if (sysInfo.rcData[THROTTLE]<2000) prop2 = 100 - (uint32_t)conf.dynThrPID*(sysInfo.rcData[THROTTLE]-1500)/500;
   else                            prop2 = 100 - conf.dynThrPID;
-	
+
   for(axis=0;axis<3;axis++) {
     uint32_t tmp = min(fabs(sysInfo.rcData[axis]-MIDRC),500);
     if(axis!=2) { //ROLL & PITCH
@@ -263,8 +263,8 @@ void annexCode() { //this code is excetuted at each loop and won't interfere wit
       sysInfo.rcCommand[axis] = sysInfo.lookupRX[tmp2] + (tmp-tmp2*100) * (sysInfo.lookupRX[tmp2+1]-sysInfo.lookupRX[tmp2]) / 100;
       prop1 = 100-(uint32_t)conf.rollPitchRate*tmp/500;
       prop1 = (uint32_t)prop1*prop2/100;
-    } 
-	else 
+    }
+	else
 	{ //YAW
       sysInfo.rcCommand[axis] = tmp;
       prop1 = 100-(uint32_t)conf.yawRate*tmp/500;
@@ -297,7 +297,7 @@ void annexCode() { //this code is excetuted at each loop and won't interfere wit
 
 
 // ******** Main Loop *********
-void loop () 
+void loop ()
 {
 	static uint32_t rcDelayCommand; // this indicates the number of time (multiple of RC measurement at 50Hz) the sticks must be maintained to run or switch off motors
 	uint32_t axis,i;
@@ -315,7 +315,7 @@ void loop ()
 	static long lastVelError = 0;
 
 	//annexCode();
- 
+
 	if(Pru.UpdateInput())
 	{
 		// #define ROLL       0
@@ -325,14 +325,14 @@ void loop ()
 		// #define AUX1       4
 		// #define AUX2       5
 		// #define AUX3       6
-		// #define AUX4       7	
+		// #define AUX4       7
 		sysInfo.rcData[0] = Pru.Input2;
 		sysInfo.rcData[1] = Pru.Input1;  //4
 		sysInfo.rcData[2] = Pru.Input4; // 1
 		sysInfo.rcData[3] = Pru.Input3;	//2
 		sysInfo.rcData[4] = Pru.Input5;
 		sysInfo.rcData[5] = Pru.Input6;
-		
+
 		// sysInfo.rcData[0] = Pru.Input3;
 		// sysInfo.rcData[1] = Pru.Input4;  //4
 		// sysInfo.rcData[2] = Pru.Input1; // 1
@@ -344,58 +344,58 @@ void loop ()
 		cout << "Pru failed update" << endl;
 	}
 
-	
-	if (sysInfo.currentTime > rcTime ) 
+
+	if (sysInfo.currentTime > rcTime )
 	{ // 50Hz
 		rcTime = sysInfo.currentTime + 30;
 		// Failsafe routine - added by MIS
 		// end of failsave routine - next change is made with RcOptions setting
-		if (sysInfo.rcData[THROTTLE] < MINCHECK) 
+		if (sysInfo.rcData[THROTTLE] < MINCHECK)
 		{
 				//cout<< "rcDelayCommand " << rcDelayCommand << endl;
 			  errorGyroI[ROLL] = 0; errorGyroI[PITCH] = 0; errorGyroI[YAW] = 0;
 			  errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
 			  rcDelayCommand++;
-			 if (sysInfo.rcData[YAW] < MINCHECK && sysInfo.rcData[PITCH] < MINCHECK && sysInfo.armed == 0) 
+			 if (sysInfo.rcData[YAW] < MINCHECK && sysInfo.rcData[PITCH] < MINCHECK && sysInfo.armed == 0)
 			 {
 				if (rcDelayCommand == 20) sysInfo.calibratingG=400;
-			 } 
-			 else if (sysInfo.rcData[YAW] > MAXCHECK && sysInfo.rcData[PITCH] > MAXCHECK && sysInfo.armed == 0) 
+			 }
+			 else if (sysInfo.rcData[YAW] > MAXCHECK && sysInfo.rcData[PITCH] > MAXCHECK && sysInfo.armed == 0)
 			 {
-				if (rcDelayCommand == 20) 
+				if (rcDelayCommand == 20)
 				{
 				  //writeServos();
 				  sysInfo.previousTime = micros();
 				}
 			 }
-			 else if ( (sysInfo.rcData[YAW] < MINCHECK || sysInfo.rcData[ROLL] < MINCHECK)  && sysInfo.armed == 1) 
+			 else if ( (sysInfo.rcData[YAW] < MINCHECK || sysInfo.rcData[ROLL] < MINCHECK)  && sysInfo.armed == 1)
 			 {
-				if (rcDelayCommand == 20) 
+				if (rcDelayCommand == 20)
 				{
 					cout << "unarmed" << endl;
 					sysInfo.armed = 0; // rcDelayCommand = 20 => 20x20ms = 0.4s = time to wait for a specific RC command to be acknowledged
 				}
-			 } 
+			 }
 			 else if ( (sysInfo.rcData[YAW] > MAXCHECK || sysInfo.rcData[ROLL] > MAXCHECK) && sysInfo.rcData[PITCH] < MAXCHECK && sysInfo.armed == 0 ) 
 			 {
-				if (rcDelayCommand == 20) 
+				if (rcDelayCommand == 20)
 				{
 				  sysInfo.armed = 1;
 				  cout << "armed" << endl;
 				  sysInfo.headFreeModeHold = sysInfo.heading;
 				}
-			} 
+			}
 			else
 			{
 				rcDelayCommand = 0;
 			}
-		} 
-		else if (sysInfo.rcData[THROTTLE] > MAXCHECK && !f.ARMED) 
+		}
+		else if (sysInfo.rcData[THROTTLE] > MAXCHECK && !f.ARMED)
 		{
 		  if (sysInfo.rcData[YAW] < MINCHECK && sysInfo.rcData[PITCH] < MINCHECK) {  //throttle=max, yaw=left, pitch=min
 			if (rcDelayCommand == 20) sysInfo.calibratingA=400;
 			rcDelayCommand++;
-		  } else if (sysInfo.rcData[YAW] > MAXCHECK && sysInfo.rcData[PITCH] < MINCHECK) { //throttle=max, yaw=right, pitch=min  
+		  } else if (sysInfo.rcData[YAW] > MAXCHECK && sysInfo.rcData[PITCH] < MINCHECK) { //throttle=max, yaw=right, pitch=min
 			if (rcDelayCommand == 20) f.CALIBRATE_MAG = 1;; // MAG calibration request
 			rcDelayCommand++;
 		  } else if (sysInfo.rcData[PITCH] > MAXCHECK) {
@@ -416,16 +416,16 @@ void loop ()
 		  sysInfo.rcOptions[i] = (auxState & conf.activate[i])>0;
 
 		// note: if FAILSAFE is disable, failsafeCnt > 5*FAILSAVE_DELAY is always false
-		if (( sysInfo.rcOptions[BOXACC] || (sysInfo.failsafeCnt > 5*FAILSAVE_DELAY) ) && ACC ) { 
+		if (( sysInfo.rcOptions[BOXACC] || (sysInfo.failsafeCnt > 5*FAILSAVE_DELAY) ) && ACC ) {
 		  // bumpless transfer to Level mode
 		  if (!f.ACC_MODE) {
 			errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
 			f.ACC_MODE = 1;
-		  }  
+		  }
 		} else {
 		  // failsafe support
 		  f.ACC_MODE = 0;
-		}		
+		}
 
     #if MAG
       if (sysInfo.rcOptions[BOXMAG]) {
@@ -446,10 +446,10 @@ void loop ()
       if (sysInfo.rcOptions[BOXHEADADJ]) {
         sysInfo.headFreeModeHold = sysInfo.heading; // acquire new heading
       }
-    #endif		
+    #endif
 
-	
-	} 
+
+	}
 
 	//computeIMU();
 	    annexCode();
@@ -466,18 +466,18 @@ void loop ()
       if (dif >= + 180) dif -= 360;
       if ( f.SMALL_ANGLES_25 ) sysInfo.rcCommand[YAW] -= dif*conf.P8[PIDMAG]/30;  // 18 deg
     } else sysInfo.magHold = sysInfo.heading;
-  #endif	
-	
+  #endif
 
-	//**** PITCH & ROLL & YAW PID ****    
-	for(axis=0;axis<3;axis++) 
+
+	//**** PITCH & ROLL & YAW PID ***
+	for(axis=0;axis<3;axis++)
 	{
 		if (f.ACC_MODE && axis<2 ) { //LEVEL MODE
 		  // 50 degrees max inclination
 		  errorAngle = constrain(2*sysInfo.rcCommand[axis] + gpsVars.GPS_angle[axis],-500,+500) - sysInfo.angle[axis] + conf.angleTrim[axis]; //16 bits is ok here
 		  #ifdef LEVEL_PDF
 			PTerm      = -(int32_t)angle[axis]*conf.P8[PIDLEVEL]/100 ;
-		  #else  
+		  #else
 			PTerm      = (int32_t)errorAngle*conf.P8[PIDLEVEL]/100 ;                          // 32 bits is needed for calculation: errorAngle*P8[PIDLEVEL] could exceed 32768   16 bits is ok for result
 		  #endif
 		  PTerm = constrain(PTerm,-conf.D8[PIDLEVEL]*5,+conf.D8[PIDLEVEL]*5);
@@ -485,26 +485,26 @@ void loop ()
 		  errorAngleI[axis]  = constrain(errorAngleI[axis]+errorAngle,-10000,+10000);    // WindUp     //16 bits is ok here
 		  ITerm              = ((int32_t)errorAngleI[axis]*conf.I8[PIDLEVEL])>>12;            // 32 bits is needed for calculation:10000*I8 could exceed 32768   16 bits is ok for result
 		}
-		else	
+		else
 		{ //ACRO MODE or YAW axis
 		  if (abs(sysInfo.rcCommand[axis])<350) error =          sysInfo.rcCommand[axis]*10*8/conf.P8[axis] ; //16 bits is needed for calculation: 350*10*8 = 28000      16 bits is ok for result if P8>2 (P>0.2)
 								   else error = (int32_t)sysInfo.rcCommand[axis]*10*8/conf.P8[axis] ; //32 bits is needed for calculation: 500*5*10*8 = 200000   16 bits is ok for result if P8>2 (P>0.2)
 		  error -= sysInfo.gyroData[axis];
 
 		  PTerm = sysInfo.rcCommand[axis];
-		  
+
 		  errorGyroI[axis]  = constrain(errorGyroI[axis]+error,-4000,+4000);          //WindUp //16 bits is ok here
 		  if (abs(sysInfo.gyroData[axis])>640) errorGyroI[axis] = 0;
 		  ITerm = (errorGyroI[axis]/125*conf.I8[axis])>>6;                                   //16 bits is ok here 16000/125 = 128 ; 128*250 = 32000
 		}
 
-		if (abs(sysInfo.gyroData[axis])<160) 
+		if (abs(sysInfo.gyroData[axis])<160)
 		{
 			PTerm -=          sysInfo.gyroData[axis]*sysInfo.dynP8[axis]/10/8; //16 bits is needed for calculation   160*200 = 32000         16 bits is ok for result
 		}
-		else 
+		else
 		{
-			PTerm -= (int32_t)sysInfo.gyroData[axis]*sysInfo.dynP8[axis]/10/8; //32 bits is needed for calculation   
+			PTerm -= (int32_t)sysInfo.gyroData[axis]*sysInfo.dynP8[axis]/10/8; //32 bits is needed for calculation
 		}
 		delta          = sysInfo.gyroData[axis] - lastGyro[axis];                               //16 bits is ok here, the dif between 2 consecutive gyro reads is limited to 800
 		lastGyro[axis] = sysInfo.gyroData[axis];
@@ -512,14 +512,14 @@ void loop ()
 		delta2[axis]   = delta1[axis];
 		delta1[axis]   = delta;
 
-		if (abs(deltaSum)<640) 
-		{	
+		if (abs(deltaSum)<640)
+		{
 			DTerm = (deltaSum*sysInfo.dynD8[axis])>>5;                       //16 bits is needed for calculation 640*50 = 32000           16 bits is ok for result 
 		}
-		else 
+		else
 		{
 			DTerm = ((int32_t)deltaSum*sysInfo.dynD8[axis])>>5;              //32 bits is needed for calculation
-		}			  
+		}
 
 		//axisPID[axis] =  PTerm/3 - DTerm;
 		//cout << (axisPID[axis])<< " " << "D " << DTerm << " I " << ITerm << " : ";
@@ -532,7 +532,7 @@ void loop ()
 	//cout << endl;
 
 	mixTable();
-	if (sysInfo.currentTime > rcTime ) 
+	if (sysInfo.currentTime > rcTime )
 	{
 		//cout << "dump data to serial port " << endl;
 		//DumpData();
@@ -558,7 +558,7 @@ void loop ()
 	// writeServos();
 	writeMotors();
 	usleep(5000);
-	
+
 }
 
 
@@ -581,14 +581,14 @@ typedef union {
   #define GYRO_SCALE ((2380 * PI)/((32767.0f / 4.0f ) * 180.0f * 1000000.0f)) //should be 2279.44 but 2380 gives better result
 
  #define PI 3.1415926
-  
+
 int16_t _atan2(float y, float x){
   #define fp_is_neg(val) ((((uint8_t*)&val)[3] & 0x80) != 0)
   float z = y / x;
-  int16_t zi = abs(int16_t(z * 100)); 
+  int16_t zi = abs(int16_t(z * 100));
   int8_t y_neg = fp_is_neg(y);
   if ( zi < 100 ){
-    if (zi > 10) 
+    if (zi > 10)
      z = z / (1.0f + 0.28f * z * z);
    if (fp_is_neg(x)) {
      if (y_neg) z -= PI;
@@ -598,7 +598,7 @@ int16_t _atan2(float y, float x){
    z = (PI / 2.0f) - z / (z * z + 0.28f);
    if (y_neg) z -= PI;
   }
-  z *= (180.0f / PI * 10); 
+  z *= (180.0f / PI * 10);
   return z;
 }
 
@@ -607,7 +607,7 @@ void rotateV(struct fp_vector *v,float* delta) {
   fp_vector v_tmp = *v;
   v->Z -= delta[ROLL]  * v_tmp.X + delta[PITCH] * v_tmp.Y;
   v->X += delta[ROLL]  * v_tmp.Z - delta[YAW]   * v_tmp.Y;
-  v->Y += delta[PITCH] * v_tmp.Z + delta[YAW]   * v_tmp.X; 
+  v->Y += delta[PITCH] * v_tmp.Z + delta[YAW]   * v_tmp.X;
 }
 
   #define ACC_LPF_FACTOR 100
@@ -616,9 +616,9 @@ void rotateV(struct fp_vector *v,float* delta) {
 #ifndef GYR_CMPF_FACTOR
   #define GYR_CMPF_FACTOR 400.0f
 #endif
-  
+
  #define INV_GYR_CMPF_FACTOR   (1.0f / (GYR_CMPF_FACTOR  + 1.0f))
- 
+
 void getEstimatedAttitude(){
   uint8_t axis;
   int32_t accMag = 0;
@@ -657,7 +657,7 @@ void getEstimatedAttitude(){
       int16_t acc = ACC_VALUE;
       EstG.A[axis] = (EstG.A[axis] * GYR_CMPF_FACTOR + acc) * INV_GYR_CMPF_FACTOR;
     }
-  
+
   // Attitude of the estimated vector
   sysInfo.angle[ROLL]  =  atan2(EstG.V.X , EstG.V.Z) ;
   sysInfo.angle[PITCH] =  _atan2(EstG.V.Y , EstG.V.Z) ;
@@ -740,8 +740,8 @@ void * DumpDataThread(void *)
 
 int main(int argc, char ** args)
 {
-	cout<<"start"<<endl;	
-	
+	cout<<"start"<<endl;
+
 	cout << "setup " << endl;
 	//	Pru.DisablePru(); 	// disable pru and keep programming running for debug
 	if(Pru.Init())
@@ -752,7 +752,7 @@ int main(int argc, char ** args)
 	{
 		cout << "Pru init failed." << endl;
 	}
-    	
+
 	sensor.Init();
 	sensor.Calibrate();
 
@@ -770,6 +770,6 @@ int main(int argc, char ** args)
 		usleep(1);
 	}
 	//loop();
-	
+
 	return 0;
 }
