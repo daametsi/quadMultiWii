@@ -11,10 +11,10 @@ public:
 	// return true if init OK
 	// init accel, gyro, mag, and baro
 	bool Init();
-		
+
 	// calibrate the sensors
 	bool Calibrate();
-	
+
 private:
 
 	int file;	// i2c file handle

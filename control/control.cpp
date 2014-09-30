@@ -375,7 +375,7 @@ void loop ()
 					sysInfo.armed = 0; // rcDelayCommand = 20 => 20x20ms = 0.4s = time to wait for a specific RC command to be acknowledged
 				}
 			 }
-			 else if ( (sysInfo.rcData[YAW] > MAXCHECK || sysInfo.rcData[ROLL] > MAXCHECK) && sysInfo.rcData[PITCH] < MAXCHECK && sysInfo.armed == 0 ) 
+			 else if ( (sysInfo.rcData[YAW] > MAXCHECK || sysInfo.rcData[ROLL] > MAXCHECK) && sysInfo.rcData[PITCH] < MAXCHECK && sysInfo.armed == 0 )
 			 {
 				if (rcDelayCommand == 20)
 				{
@@ -679,10 +679,10 @@ void *SensorThread( void * )
 		j ++;
 		if(sensor.Gyro.UpdateData())
 		{
-			printf("gyro read");
 			temp[0] = sensor.Gyro.x;
 			temp[1] = sensor.Gyro.y;
 			temp[2] = sensor.Gyro.z;
+			//printf("x: %d, y: %d, z: %d\n",sensor.Gyro.x, sensor.Gyro.y, sensor.Gyro.z);
 			int axis = 0;
 			for(axis = 0; axis < 3; axis ++)
 			{
@@ -702,7 +702,7 @@ void *SensorThread( void * )
 		{
 			if(sensor.Gyro.UpdateAcc())
 			{
-				printf("accel read");
+				printf("x: %d, y: %d, z: %d\n",sensor.Gyro.xAC, sensor.Gyro.yAC, sensor.Gyro.zAC);
 				sysInfo.AccRead ++;
 				sysInfo.accADC[0] = sensor.Gyro.xAC;
 				sysInfo.accADC[1] = sensor.Gyro.yAC;

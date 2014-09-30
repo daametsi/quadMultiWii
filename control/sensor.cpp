@@ -30,7 +30,7 @@ bool Sensor::i2c_bus_init() {
 		if (file >= 0)
 			close(file);
 		r = false;
-	} else 
+	} else
 	{
 		printf("Opened /dev/i2c-1\n");
 		r = true;
@@ -45,7 +45,7 @@ bool Sensor::Init() {
 		Gyro.Init(file);
 		//Acc.Init(file);
 	}
-	
+
 	return true;
 }
 
@@ -63,6 +63,7 @@ bool Sensor::Calibrate()
 {
 	cout << "Calibrate sensors" << endl;
 	Gyro.Calibrate();
+	//Gyro.CalibrateAC();
 	//Acc.Calibrate();
 	return true;
 
