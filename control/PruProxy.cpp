@@ -95,12 +95,12 @@ bool PruProxy::UpdateInput()
 {
 	if(Enabled)
 	{
-		Input1 = (*(unsigned long *)(0x8e0)/200);
-		Input2 = (*(unsigned long *)(0x8e8)/200);
-		Input3 = (*(unsigned long *)(0x8e4)/200);
-		Input4 = (*(unsigned long *)(0x984)/200);
-		Input5 = (*(unsigned long *)(0x980)/200);
-		Input6 = (*(unsigned long *)(0x9a4)/200);
+		Input1 = (*(unsigned long *)(sharedMem + 0x114))/200;
+		Input2 = (*(unsigned long *)(sharedMem + 0x124)/200);
+		Input3 = (*(unsigned long *)(sharedMem + 0x134)/200);
+		Input4 = (*(unsigned long *)(sharedMem + 0x144)/200);
+		Input5 = (*(unsigned long *)(sharedMem + 0x154)/200);
+		Input6 = (*(unsigned long *)(sharedMem + 0x164)/200);
 		// if(Input1 > 2000 || Input1 < 1000)
 		// {
 			// Input1 = 1050;
@@ -133,15 +133,15 @@ bool PruProxy::InitOutput()
 {
 	if(Enabled)
 	{
-		*(unsigned long *)(sharedMem + 0x52) = 1000 * 200;
-		*(unsigned long *)(sharedMem + 0x48) = 1000 * 200;
-		*(unsigned long *)(sharedMem + 0x60) = 1000 * 200;
-		*(unsigned long *)(sharedMem + 0x56) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x240) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x250) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x220) = 1000 * 200;
+		*(unsigned long *)(sharedMem + 0x230) = 1000 * 200;
 
-		*(unsigned long *)(sharedMem + 0x56) = 5000 * 200;
-		*(unsigned long *)(sharedMem + 0x52) = 5000 * 200;
-		*(unsigned long *)(sharedMem + 0x64) = 5000 * 200;
-		*(unsigned long *)(sharedMem + 0x60) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x244) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x254) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x224) = 5000 * 200;
+		*(unsigned long *)(sharedMem + 0x234) = 5000 * 200;
 
 	}
 	return true;
@@ -151,10 +151,10 @@ bool PruProxy::UpdateOutput()
 {
 	if(Enabled)
 	{
-		*(unsigned long *)(sharedMem + 0x52) = Output1;
-		*(unsigned long *)(sharedMem + 0x48) = Output2;
-		*(unsigned long *)(sharedMem + 0x60) = Output3;
-		*(unsigned long *)(sharedMem + 0x56) = Output4;
+		*(unsigned long *)(sharedMem + 0x240) = Output1;
+		*(unsigned long *)(sharedMem + 0x250) = Output2;
+		*(unsigned long *)(sharedMem + 0x220) = Output3;
+		*(unsigned long *)(sharedMem + 0x230) = Output4;
 
 	}
 	return true;

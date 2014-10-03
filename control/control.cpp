@@ -108,8 +108,8 @@ void InitGpsVars(GPS_Common_Variables& g)
 // ******************
 // rc functions
 // ******************
-#define MINCHECK 1050
-#define MAXCHECK 1950
+#define MINCHECK 1150
+#define MAXCHECK 1890
 
 void *SensorThread( void * );
 
@@ -186,7 +186,7 @@ void setup()
   // initSensors();
   sysInfo.previousTime = micros();
   sysInfo.calibratingG = 400;
-
+  cout << "setup done. " << endl;
 }
 
 
@@ -336,7 +336,7 @@ void loop ()
 		// sysInfo.rcData[1] = Pru.Input4;  //4
 		// sysInfo.rcData[2] = Pru.Input1; // 1
 		// sysInfo.rcData[3] = Pru.Input2;	//2
-		//cout << "C1: " << rcData[0]<< " C2:" << rcData[1] << " C3:" << rcData[2] << " C4:" << rcData[3] << endl;
+		//cout << "C1: " << sysInfo.rcData[0]<< " C2:" << sysInfo.rcData[1] << " C3:" << sysInfo.rcData[2] << " C4:" << sysInfo.rcData[3] << endl;
 	}
 	else
 	{
@@ -367,7 +367,7 @@ void loop ()
 				  sysInfo.previousTime = micros();
 				}
 			 }
-			 else if ( (sysInfo.rcData[YAW] < MINCHECK || sysInfo.rcData[ROLL] < MINCHECK)  && sysInfo.armed == 1)
+			 else if ( sysInfo.rcData[YAW] > MAXCHECK && sysInfo.rcData[THROTTLE] < MINCHECK  && sysInfo.armed == 1)
 			 {
 				if (rcDelayCommand == 20)
 				{
@@ -375,7 +375,7 @@ void loop ()
 					sysInfo.armed = 0; // rcDelayCommand = 20 => 20x20ms = 0.4s = time to wait for a specific RC command to be acknowledged
 				}
 			 }
-			 else if ( (sysInfo.rcData[YAW] > MAXCHECK || sysInfo.rcData[ROLL] > MAXCHECK) && sysInfo.rcData[PITCH] < MAXCHECK && sysInfo.armed == 0 )
+			 else if ( sysInfo.rcData[THROTTLE] < MINCHECK && sysInfo.rcData[YAW] < MINCHECK && sysInfo.armed == 0 )
 			 {
 				if (rcDelayCommand == 20)
 				{
@@ -682,7 +682,7 @@ void *SensorThread( void * )
 			temp[0] = sensor.Gyro.x;
 			temp[1] = sensor.Gyro.y;
 			temp[2] = sensor.Gyro.z;
-			//printf("GYRO= x: %d, y: %d, z: %d\n",sensor.Gyro.x, sensor.Gyro.y, sensor.Gyro.z);
+			printf("GYRO= x: %d, y: %d, z: %d\n",sensor.Gyro.x, sensor.Gyro.y, sensor.Gyro.z);
 			int axis = 0;
 			for(axis = 0; axis < 3; axis ++)
 			{

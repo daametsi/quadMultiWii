@@ -63,7 +63,7 @@ bool Sensor::Calibrate()
 {
 	cout << "Calibrate sensors" << endl;
 	Gyro.Calibrate();
-	//Gyro.CalibrateAC();
+	Gyro.CalibrateAcc();
 	//Acc.Calibrate();
 	return true;
 

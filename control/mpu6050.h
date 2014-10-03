@@ -15,6 +15,8 @@ bool UpdateData();
 bool UpdateAcc();
 // Calibrate the gyro
 bool Calibrate();
+// Calibrate the accel
+bool CalibrateAcc();
 private:
 long m_xOffset, m_yOffset, m_zOffset, m_xOffsetAC, m_yOffsetAC, m_zOffsetAC;
 

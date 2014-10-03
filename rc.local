@@ -20,5 +20,9 @@ echo 51 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio51/direction
 echo 1 > /sys/class/gpio/gpio51/value
 
+cd home/ubuntu/am335x_pru_package/pru_sw/example_apps/PRU_memAccess_DDR_PRUsharedRAM/obj/
+./mytest.out
+cd
+
 /home/ubuntu/quad/startQuad.sh
 
