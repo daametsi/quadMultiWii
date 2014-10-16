@@ -677,12 +677,12 @@ void *SensorThread( void * )
 		int temp[3];
 		i ++;
 		j ++;
-		if(sensor.Gyro.UpdateData())
+		if(sensor.MPU.UpdateData())
 		{
-			temp[0] = sensor.Gyro.x;
-			temp[1] = sensor.Gyro.y;
-			temp[2] = sensor.Gyro.z;
-			printf("GYRO= x: %d, y: %d, z: %d\n",sensor.Gyro.x, sensor.Gyro.y, sensor.Gyro.z);
+			temp[0] = sensor.MPU.x;
+			temp[1] = sensor.MPU.y;
+			temp[2] = sensor.MPU.z;
+			//printf("GYRO= x: %d, y: %d, z: %d\n",sensor.MPU.x, sensor.MPU.y, sensor.MPU.z);
 			int axis = 0;
 			for(axis = 0; axis < 3; axis ++)
 			{
@@ -700,13 +700,13 @@ void *SensorThread( void * )
 		}
 		if( i > 10)
 		{
-			if(sensor.Gyro.UpdateAcc())
+			if(sensor.MPU.UpdateAcc())
 			{
-				//printf("ACCEL= x: %d, y: %d, z: %d\n",sensor.Gyro.xAC, sensor.Gyro.yAC, sensor.Gyro.zAC);
+				//printf("ACCEL= x: %d, y: %d, z: %d\n",sensor.MPU.xAC, sensor.MPU.yAC, sensor.MPU.zAC);
 				sysInfo.AccRead ++;
-				sysInfo.accADC[0] = sensor.Gyro.xAC;
-				sysInfo.accADC[1] = sensor.Gyro.yAC;
-				sysInfo.accADC[2] = sensor.Gyro.zAC;
+				sysInfo.accADC[0] = sensor.MPU.xAC;
+				sysInfo.accADC[1] = sensor.MPU.yAC;
+				sysInfo.accADC[2] = sensor.MPU.zAC;
 				getEstimatedAttitude();
 			}
 			else

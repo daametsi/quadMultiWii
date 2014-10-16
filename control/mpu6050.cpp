@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,7 +37,7 @@ Yh
 Yl
 Zh
 Zl
-/*
+*/
 char buf[8];
 
 int adapter_nr = 3;
@@ -128,13 +127,10 @@ MPU6050::~MPU6050()
 // return true if Calibrate OK
 bool MPU6050::Calibrate()
 {
-	printf("Calibration start.\n");
+	printf("MPU6050 calibration\n");
 	m_xOffset = 0;
 	m_yOffset = 0;
 	m_zOffset = 0;
-	m_xOffsetAC = 0;
-	m_yOffsetAC = 0;
-	m_zOffsetAC = 0;
 	int count = 400;
 	short x1, y1, z1;
 	unsigned char buf2[6] = {0,0,0,0,0,0};
@@ -246,11 +242,11 @@ bool MPU6050::UpdateData()
 // return true if Calibrate OK
 bool MPU6050::CalibrateAcc(){
 	cout << "MPU6050Acc Calibrate" << endl;
-	int i2c_addr = 0x63; // mpu i2c address
+	int i2c_addr = 0x68; // mpu i2c address
 
-	m_xOffset = 0;
-	m_yOffset = 0;
-	m_zOffset = 0;
+	m_xOffsetAC = 0;
+        m_yOffsetAC = 0;
+        m_zOffsetAC = 0;
 	int count = 400;
 	short x1, y1, z1;
 	unsigned char buf2[8] = {0,0,0,0,0,0};
@@ -275,7 +271,7 @@ bool MPU6050::CalibrateAcc(){
 		// delay for adjusting reporting speed. Bad data without.
 		if (read(file, buf2, rb) != rb)
 		{
-			printf("CAL ACC: I2C Send %x Failed\n", i2c_addr);
+			printf("CAL ACC: I2C Read %x Failed\n", i2c_addr);
 			usleep(10000);
 			i--;    // read again
 		} else
@@ -287,9 +283,9 @@ bool MPU6050::CalibrateAcc(){
 			memcpy(&y1, y2, 2);
 			unsigned char z2[2] = {buf2[6], buf2[7]};
 			memcpy(&z1, z2, 2);
-			m_xOffset += x1;
-			m_yOffset += y1;
-			m_zOffset += z1;
+			m_xOffsetAC += x1;
+			m_yOffsetAC += y1;
+			m_zOffsetAC += z1;
 		//}
 		//else
 		//{
@@ -300,10 +296,10 @@ bool MPU6050::CalibrateAcc(){
 		usleep(25000);
 	}
 
-	m_xOffset = m_xOffset/count;
-	m_yOffset = m_yOffset/count;
-	m_zOffset = m_zOffset/count - 265;	// 265 is gravity adjustment
-	cout << "X offset: " << m_xOffset << " Y offset:" << m_yOffset << " Z offset:" << m_zOffset << endl;
+	m_xOffsetAC = m_xOffsetAC/count;
+	m_yOffsetAC = m_yOffsetAC/count;
+	m_zOffsetAC = m_zOffsetAC/count - 265;	// 265 is gravity adjustment
+	cout << "X offset: " << m_xOffsetAC << " Y offset:" << m_yOffsetAC << " Z offset:" << m_zOffsetAC << endl;
 	return true;
 
 }

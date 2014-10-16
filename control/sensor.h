@@ -5,7 +5,7 @@ class MPU6050;
 class Sensor
 {
 public:
-	MPU6050 Gyro;
+	MPU6050 MPU;
 	Sensor();
 	~Sensor();
 	// return true if init OK

@@ -42,7 +42,7 @@ bool Sensor::i2c_bus_init() {
 bool Sensor::Init() {
 	if(i2c_bus_init())
 	{
-		Gyro.Init(file);
+		MPU.Init(file);
 		//Acc.Init(file);
 	}
 
@@ -62,8 +62,8 @@ Sensor::~Sensor()
 bool Sensor::Calibrate()
 {
 	cout << "Calibrate sensors" << endl;
-	Gyro.Calibrate();
-	Gyro.CalibrateAcc();
+	MPU.Calibrate();
+	MPU.CalibrateAcc();
 	//Acc.Calibrate();
 	return true;
 

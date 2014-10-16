@@ -67,7 +67,7 @@ void Config::LoadDefault()
 	yawRate = 0;
 	dynThrPID = 0;
 	thrMid8 = 50; thrExpo8 = 0;
-	for(uint8_t i=0;i<CHECKBOXITEMS;i++) 
+	for(uint8_t i=0;i<CHECKBOXITEMS;i++)
 	{
 		activate[i] = 0;
 	}
@@ -87,7 +87,7 @@ void Config::Dump()
 	cout << "P8[ROLL]  =" << (int)P8[ROLL] << " I8[ROLL] = " << (int)I8[ROLL] << " D8[ROLL] = " << (int)D8[ROLL] << endl;
 	cout << "P8[PITCH] =" << (int)P8[PITCH] << " I8[PITCH] =" << (int)I8[PITCH] << " D8[PITCH] =" << (int)D8[PITCH] << endl;
 	cout << "P8[YAW]   =" << (int)P8[YAW] << " I8[YAW]  =" << (int)I8[YAW] << " D8[YAW]  =" <<  (int)D8[YAW] << endl;
-	
+
      cout << "rcRate8 = " << (int)rcRate8 << endl;
      cout << "rcExpo8  = " << (int)rcExpo8  << endl;
      cout << "rollPitchRate  = " << (int)rollPitchRate  << endl;
