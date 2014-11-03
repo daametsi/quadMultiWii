@@ -249,7 +249,7 @@ bool MPU6050::CalibrateAcc(){
         m_zOffsetAC = 0;
 	int count = 400;
 	short x1, y1, z1;
-	unsigned char buf2[8] = {0,0,0,0,0,0};
+	unsigned char buf2[6] = {0,0,0,0,0,0};
 	int rb = 6;
 	unsigned char buf1[1] = {0x3B};
 	// 0x30 is status byte,
@@ -277,11 +277,11 @@ bool MPU6050::CalibrateAcc(){
 		} else
 		//if((buf2[0] & 0x80 )== 0x80)	// new set of data is availabe, bit 7 is flag for new data ready
 		{
-			unsigned char x2[2] = {buf2[2], buf2[3]};
+			unsigned char x2[2] = {buf2[0], buf2[1]};
 			memcpy(&x1, x2, 2);
-			unsigned char y2[2] = {buf2[4], buf2[5]};
+			unsigned char y2[2] = {buf2[2], buf2[3]};
 			memcpy(&y1, y2, 2);
-			unsigned char z2[2] = {buf2[6], buf2[7]};
+			unsigned char z2[2] = {buf2[4], buf2[5]};
 			memcpy(&z1, z2, 2);
 			m_xOffsetAC += x1;
 			m_yOffsetAC += y1;
@@ -293,7 +293,7 @@ bool MPU6050::CalibrateAcc(){
 		//	i--;	// read again
 		//	printf(" Wrong data %d\n", buf2[0]);
 		}
-		usleep(25000);
+		usleep(2500);
 	}
 
 	m_xOffsetAC = m_xOffsetAC/count;

@@ -468,7 +468,7 @@ void loop ()
   #endif
 
 
-	//**** PITCH & ROLL & YAW PID ***
+	// PITCH & ROLL & YAW PID ***
 	for(axis=0;axis<3;axis++)
 	{
 		if (f.ACC_MODE && axis<2 ) { //LEVEL MODE
@@ -682,7 +682,7 @@ void *SensorThread( void * )
 			temp[0] = sensor.MPU.x;
 			temp[1] = sensor.MPU.y;
 			temp[2] = sensor.MPU.z;
-			//printf("GYRO= x: %d, y: %d, z: %d\n",sensor.MPU.x, sensor.MPU.y, sensor.MPU.z);
+			printf("GYRO= x: %d, y: %d, z: %d\n",sensor.MPU.x, sensor.MPU.y, sensor.MPU.z);
 			int axis = 0;
 			for(axis = 0; axis < 3; axis ++)
 			{
@@ -717,7 +717,7 @@ void *SensorThread( void * )
 		}
 		if(j > 200)
 		{
-			printf("read 200 data\n");
+			//printf("read 200 data\n");
 			j = 0;
 		}
 		usleep(2500);
