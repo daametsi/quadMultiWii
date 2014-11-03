@@ -666,7 +666,7 @@ void getEstimatedAttitude(){
 void *SensorThread( void * )
 {
 	printf("Gyro Thread start\n");
-	sensor.Calibrate();
+	//sensor.Calibrate();
 	int gyroADCp[3] = {0,0,0};
 	int gyroADCinter[3] = {0,0,0};
 	int gyroADCprevious[3] = {0,0,0};
@@ -755,7 +755,7 @@ int main(int argc, char ** args)
 	}
 
 	sensor.Init();
-	sensor.Calibrate();
+	//sensor.Calibrate();
 
 	initSysVari(sysInfo);
 	InitGpsVars(gpsVars);

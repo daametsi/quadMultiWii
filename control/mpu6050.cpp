@@ -41,7 +41,7 @@ Zl
 char buf[8];
 
 int adapter_nr = 3;
-int i2c_addr = 0b1101001;
+int i2c_addr = 0b1101000;
 
 int i;
 
