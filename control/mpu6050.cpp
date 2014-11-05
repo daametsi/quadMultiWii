@@ -160,12 +160,15 @@ bool MPU6050::Calibrate()
 		}else
 		//if((buf2[0] & 0x8 )== 0x8)	// new set of data is available
 		{
-			unsigned char x2[2] = {buf2[0], buf2[1]};
-			memcpy(&x1, x2, 2);
-			unsigned char y2[2] = {buf2[2], buf2[3]};
-			memcpy(&y1, y2, 2);
-			unsigned char z2[2] = {buf2[4], buf2[5]};
-			memcpy(&z1, z2, 2);
+			x1 = (buf2[0]<<8) | buf2[1];
+			y1 = (buf2[2]<<8) | buf2[3];
+			z1 = (buf2[4]<<8) | buf2[5];
+			//unsigned char x2[2] = {buf2[0], buf2[1]};
+			//memcpy(&x1, x2, 2);
+			//unsigned char y2[2] = {buf2[2], buf2[3]};
+			//memcpy(&y1, y2, 2);
+			//unsigned char z2[2] = {buf2[4], buf2[5]};
+			//memcpy(&z1, z2, 2);
 			m_xOffset += x1;
 			m_yOffset += y1;
 			m_zOffset += z1;
@@ -214,12 +217,16 @@ bool MPU6050::UpdateData()
 	//if((buf2[0] & 0x8) == 0x8)
 	{
 		short x1, y1, z1;
-		unsigned char x2[2] = {buf2[0], buf2[1]};
-		memcpy(&x1, x2, 2);
-		unsigned char y2[2] = {buf2[2], buf2[3]};
-		memcpy(&y1, y2, 2);
-		unsigned char z2[2] = {buf2[4], buf2[5]};
-		memcpy(&z1, z2, 2);
+		x1 = (buf2[0]<<8) | buf2[1];
+                y1 = (buf2[2]<<8) | buf2[3];
+                z1 = (buf2[4]<<8) | buf2[5];
+
+		//unsigned char x2[2] = {buf2[0], buf2[1]};
+		//memcpy(&x1, x2, 2);
+		//unsigned char y2[2] = {buf2[2], buf2[3]};
+		//memcpy(&y1, y2, 2);
+		//unsigned char z2[2] = {buf2[4], buf2[5]};
+		//memcpy(&z1, z2, 2);
 
 		x1 = x1 - m_xOffset;
 		y1 = y1 - m_yOffset;
@@ -277,12 +284,15 @@ bool MPU6050::CalibrateAcc(){
 		} else
 		//if((buf2[0] & 0x80 )== 0x80)	// new set of data is availabe, bit 7 is flag for new data ready
 		{
-			unsigned char x2[2] = {buf2[0], buf2[1]};
-			memcpy(&x1, x2, 2);
-			unsigned char y2[2] = {buf2[2], buf2[3]};
-			memcpy(&y1, y2, 2);
-			unsigned char z2[2] = {buf2[4], buf2[5]};
-			memcpy(&z1, z2, 2);
+			x1 = (buf2[0]<<8) | buf2[1];
+                        y1 = (buf2[2]<<8) | buf2[3];
+                        z1 = (buf2[4]<<8) | buf2[5];
+			//unsigned char x2[2] = {buf2[0], buf2[1]};
+			//memcpy(&x1, x2, 2);
+			//unsigned char y2[2] = {buf2[2], buf2[3]};
+			//memcpy(&y1, y2, 2);
+			//unsigned char z2[2] = {buf2[4], buf2[5]};
+			//memcpy(&z1, z2, 2);
 			m_xOffsetAC += x1;
 			m_yOffsetAC += y1;
 			m_zOffsetAC += z1;
@@ -331,16 +341,20 @@ bool MPU6050::UpdateAcc()
 	//if((buf2[0] & 0x8) == 0x8)
 	{
 		short x1, y1, z1;
-		unsigned char x2[2] = {buf2[0], buf2[1]};
-		memcpy(&x1, x2, 2);
-		unsigned char y2[2] = {buf2[2], buf2[3]};
-		memcpy(&y1, y2, 2);
-		unsigned char z2[2] = {buf2[4], buf2[5]};
-		memcpy(&z1, z2, 2);
+		x1 = (buf2[0]<<8) | buf2[1];
+                y1 = (buf2[2]<<8) | buf2[3];
+                z1 = (buf2[4]<<8) | buf2[5];
 
-		//x1 = x1 - m_xOffsetAC;
-		//y1 = y1 - m_yOffsetAC;
-		//z1 = z1 - m_zOffsetAC;
+		//unsigned char x2[2] = {buf2[0], buf2[1]};
+		//memcpy(&x1, x2, 2);
+		//unsigned char y2[2] = {buf2[2], buf2[3]};
+		//memcpy(&y1, y2, 2);
+		//unsigned char z2[2] = {buf2[4], buf2[5]};
+		//memcpy(&z1, z2, 2);
+
+		x1 = x1 - m_xOffsetAC;
+		y1 = y1 - m_yOffsetAC;
+		z1 = z1 - m_zOffsetAC;
 
 		xAC = x1;
 		yAC = y1;

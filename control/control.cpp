@@ -666,7 +666,7 @@ void getEstimatedAttitude(){
 void *SensorThread( void * )
 {
 	printf("Gyro Thread start\n");
-	//sensor.Calibrate();
+	sensor.Calibrate();
 	int gyroADCp[3] = {0,0,0};
 	int gyroADCinter[3] = {0,0,0};
 	int gyroADCprevious[3] = {0,0,0};
@@ -682,7 +682,10 @@ void *SensorThread( void * )
 			temp[0] = sensor.MPU.x;
 			temp[1] = sensor.MPU.y;
 			temp[2] = sensor.MPU.z;
-			printf("GYRO= x: %d, y: %d, z: %d\n",sensor.MPU.x, sensor.MPU.y, sensor.MPU.z);
+			//temp[0] = 0;
+                        //temp[1] = 0;
+                        //temp[2] = 0;
+			//printf("GYRO= x: %d, y: %d, z: %d\n",sensor.MPU.x, sensor.MPU.y, sensor.MPU.z);
 			int axis = 0;
 			for(axis = 0; axis < 3; axis ++)
 			{
@@ -707,6 +710,9 @@ void *SensorThread( void * )
 				sysInfo.accADC[0] = sensor.MPU.xAC;
 				sysInfo.accADC[1] = sensor.MPU.yAC;
 				sysInfo.accADC[2] = sensor.MPU.zAC;
+				//sysInfo.accADC[0] = 0;
+                                //sysInfo.accADC[1] = 0;
+                                //sysInfo.accADC[2] = 0;
 				getEstimatedAttitude();
 			}
 			else
@@ -755,7 +761,7 @@ int main(int argc, char ** args)
 	}
 
 	sensor.Init();
-	//sensor.Calibrate();
+	sensor.Calibrate();
 
 	initSysVari(sysInfo);
 	InitGpsVars(gpsVars);
