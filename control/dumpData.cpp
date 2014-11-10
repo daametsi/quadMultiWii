@@ -401,33 +401,33 @@ void MemoryStream::evaluateOtherData(uint8_t sr) {
 
 
 void MemoryStream::serialCom() {
-  uint8_t c;  
+  uint8_t c;
   static uint8_t offset;
   static uint8_t dataSize;
 	sp = this;
-	while (1) 
+	while (1)
 	{
 		c = SerialRead();
 		//continue;
-		if (c_state == IDLE) 
+		if (c_state == IDLE)
 		{
 			c_state = (c=='$') ? HEADER_START : IDLE;
-			if (c_state == IDLE) 
-			{	
+			if (c_state == IDLE)
+			{
 				evaluateOtherData(c); // evaluate all other incoming serial data
 			}
-		} 
-		else if (c_state == HEADER_START) 
+		}
+		else if (c_state == HEADER_START)
 		{
 		  c_state = (c=='M') ? HEADER_M : IDLE;
-		} 
-		else if (c_state == HEADER_M) 
+		}
+		else if (c_state == HEADER_M)
 		{
 		  c_state = (c=='<') ? HEADER_ARROW : IDLE;
 		}
-		else if (c_state == HEADER_ARROW) 
+		else if (c_state == HEADER_ARROW)
 		{
-			// if (c > INBUF_SIZE) 
+			// if (c > INBUF_SIZE)
 			// {  // now we are expecting the payload size
 				// c_state = IDLE;
 				// continue;
@@ -438,21 +438,21 @@ void MemoryStream::serialCom() {
 			indRX = 0;
 			checksum ^= c;
 			c_state = HEADER_SIZE;  // the command is to follow
-		} 
-		else if (c_state == HEADER_SIZE) 
+		}
+		else if (c_state == HEADER_SIZE)
 		{
 		  cmdMSP = c;
 		  checksum ^= c;
 		  c_state = HEADER_CMD;
 		}
-		else if (c_state == HEADER_CMD && offset < dataSize) 
+		else if (c_state == HEADER_CMD && offset < dataSize)
 		{
 		  checksum ^= c;
 		  inBuf[offset++] = c;
-		} 
-		else if (c_state == HEADER_CMD && offset >= dataSize) 
+		}
+		else if (c_state == HEADER_CMD && offset >= dataSize)
 		{
-			if (checksum == c) 
+			if (checksum == c)
 			{  // compare calculated and transferred checksum
 				evaluateCommand();  // we got a valid packet, evaluate it
 			}
@@ -486,9 +486,9 @@ int MemoryStream::OpenPort()
 		newtio.c_iflag = (IGNPAR);
 		newtio.c_oflag = 0;
 
-		newtio.c_cflag |= BAUDRATE;				
+		newtio.c_cflag |= BAUDRATE;
 
-		newtio.c_cflag &= ~(PARENB | PARODD);	
+		newtio.c_cflag &= ~(PARENB | PARODD);
 		newtio.c_cflag &= ~CSTOPB;
 
 		newtio.c_cflag |= CS8;
@@ -496,7 +496,7 @@ int MemoryStream::OpenPort()
 		newtio.c_iflag &= ~(IXON | IXOFF | IXANY);
 		newtio.c_cflag &= ~CRTSCTS;
 		newtio.c_lflag =0;
-		
+
 		newtio.c_cc[VMIN] = 0;
 		newtio.c_cc[VTIME] = 0.5;		// time out in 1 seoncds
 
@@ -505,8 +505,8 @@ int MemoryStream::OpenPort()
 
 		tcflush(fd, TCIFLUSH);
 		tcsetattr(fd,TCSANOW, &newtio);
-	} 
-	return fd;	
+	}
+	return fd;
 }
 
 void MemoryStream::ClosePort()
@@ -600,7 +600,7 @@ void	MemoryStream::DumpData()
 	}
 	WritePort(p, buffer.size());
 	buffer.clear();
-	delete []p;	
+	delete []p;
 }
 
 int MemoryStream::ReadData(char * buffer, int size)
@@ -617,7 +617,7 @@ int MemoryStream::ReadData(char * buffer, int size)
 unsigned char MemoryStream::ReadByte()
 {
 	unsigned char buffer[1];
-	
+
 	int iOut = read(fd, buffer, 1);
 	while(iOut < 1)
 	{

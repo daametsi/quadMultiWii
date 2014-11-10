@@ -1,10 +1,14 @@
 //#define L3G4200D
 //#define ADXL345
 //#define HMC5883
-#define ACC_ORIENTATION(X, Y, Z)  {accADC[ROLL]  = Y; accADC[PITCH]  = X; accADC[YAW]  = Z;}
+#define ACC_ORIENTATION(X, Y, Z)  {accADC[ROLL]  = -Y; accADC[PITCH]  = X; accADC[YAW]  = Z;}
 #define GYRO_ORIENTATION(X, Y, Z) {gyroADC[ROLL] = X; gyroADC[PITCH] = Y; gyroADC[YAW] = Z;}
 #define MAG_ORIENTATION(X, Y, Z)  {magADC[ROLL]  =  X; magADC[PITCH]  = Y; magADC[YAW]  = Z;}
 //#define ADXL345_ADDRESS 0xA6
+
+//#define MPU6050
+
+#define GYRO 1
 
 //#define ACC 0
 
@@ -14,11 +18,11 @@
   #define MAG 0
 #endif
 
-#if defined(ITG3200) || defined(L3G4200D) || defined(MPU6050)
-  #define GYRO 1
-#else
-  #define GYRO 0
-#endif
+//#if defined(ITG3200) || defined(L3G4200D) || defined(MPU6050)
+//  #define GYRO 1
+//#else
+//  #define GYRO 0
+//#endif
 
 #if defined(BMP085) || defined(MS561101BA)
   #define BARO 1

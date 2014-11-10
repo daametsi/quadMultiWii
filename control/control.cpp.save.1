@@ -414,7 +414,7 @@ void loop ()
 		  sysInfo.rcOptions[i] = (auxState & conf.activate[i])>0;
 		//printf("BOXACC: %d || %d && %d\n",sysInfo.rcOptions[BOXACC], (sysInfo.failsafeCnt > 5*FAILSAVE_DELAY), ACC);
 		// note: if FAILSAFE is disable, failsafeCnt > 5*FAILSAVE_DELAY is always false
-		if (( sysInfo.rcOptions[BOXACC] || (sysInfo.failsafeCnt > 5*FAILSAVE_DELAY) ) && ACC ) {
+		if (( true || (sysInfo.failsafeCnt > 5*FAILSAVE_DELAY) ) && ACC ) {
 		  // bumpless transfer to Level mode
 		  if (!f.ACC_MODE) {
 			errorAngleI[ROLL] = 0; errorAngleI[PITCH] = 0;
@@ -485,28 +485,26 @@ void loop ()
 		}
 		else
 		{ //ACRO MODE or YAW axis
-		  if (abs(sysInfo.rcCommand[axis])<350)
-			error =          sysInfo.rcCommand[axis]<<1 ; //16 bits is needed for calculation: 350*10*8 = 28000      16 bits is ok for result if P8>2 (P>0.2)
-		  else
-			error = (int32_t)sysInfo.rcCommand[axis]<<1 ; //32 bits is needed for calculation: 500*5*10*8 = 200000   16 bits is ok for result if P8>2 (P>0.2)
+		  if (abs(sysInfo.rcCommand[axis])<350) error =          sysInfo.rcCommand[axis]*10*8/conf.P8[axis] ; //16 bits is needed for calculation: 350*10*8 = 28000      16 bits is ok for result if P8>2 (P>0.2)
+								   else error = (int32_t)sysInfo.rcCommand[axis]*10*8/conf.P8[axis] ; //32 bits is needed for calculation: 500*5*10*8 = 200000   16 bits is ok for result if P8>2 (P>0.2)
 		  error -= sysInfo.gyroData[axis];
 
-		  PTerm = (sysInfo.rcCommand[axis] * conf.P8[axis])>>6;
+		  PTerm = sysInfo.rcCommand[axis];
 
-		  errorGyroI[axis]  = constrain(errorGyroI[axis]+error,-16000,+16000);          //WindUp //16 bits is ok here
+		  errorGyroI[axis]  = constrain(errorGyroI[axis]+error,-4000,+4000);          //WindUp //16 bits is ok here
 		  if (abs(sysInfo.gyroData[axis])>640) errorGyroI[axis] = 0;
-		  ITerm = ((errorGyroI[axis]>>7)*conf.I8[axis])>>6;                                   //16 bits is ok here 16000/125 = 128 ; 128*250 = 32000
+		  ITerm = (errorGyroI[axis]/125*conf.I8[axis])>>6;                                   //16 bits is ok here 16000/125 = 128 ; 128*250 = 32000
 		}
 
-		//printf("error Angle ROLL: %d error Angle PITCH: %d\n", errorAngle[ROLL], errorAngle[PITCH]);
+		printf("error Angle ROLL: %d error Angle PITCH: %d\n", errorAngle[ROLL], errorAngle[PITCH]);
 
 		if (abs(sysInfo.gyroData[axis])<160)
 		{
-			PTerm -=          (sysInfo.gyroData[axis]*sysInfo.dynP8[axis])>>6; //16 bits is needed for calculation   160*200 = 32000         16 bits is ok for result
+			PTerm -=          sysInfo.gyroData[axis]*sysInfo.dynP8[axis]/10/8; //16 bits is needed for calculation   160*200 = 32000         16 bits is ok for result
 		}
 		else
 		{
-			PTerm -= ((int32_t)sysInfo.gyroData[axis]*sysInfo.dynP8[axis])>>6; //32 bits is needed for calculation
+			PTerm -= (int32_t)sysInfo.gyroData[axis]*sysInfo.dynP8[axis]/10/8; //32 bits is needed for calculation
 		}
 		delta          = sysInfo.gyroData[axis] - lastGyro[axis];                               //16 bits is ok here, the dif between 2 consecutive gyro reads is limited to 800
 		lastGyro[axis] = sysInfo.gyroData[axis];
@@ -612,11 +610,11 @@ void rotateV(struct fp_vector *v,float* delta) {
   v->Y += delta[PITCH] * v_tmp.Z + delta[YAW]   * v_tmp.X;
 }
 
-  #define ACC_LPF_FACTOR 4
+  #define ACC_LPF_FACTOR 100
 /* Set the Gyro Weight for Gyro/Acc complementary filter */
 /* Increasing this value would reduce and delay Acc influence on the output of the filter*/
 #ifndef GYR_CMPF_FACTOR
-  #define GYR_CMPF_FACTOR 10
+  #define GYR_CMPF_FACTOR 400.0f
 #endif
 
  #define INV_GYR_CMPF_FACTOR   (1.0f / (GYR_CMPF_FACTOR  + 1.0f))
@@ -625,7 +623,7 @@ void getEstimatedAttitude(){
   uint8_t axis;
   int32_t accMag = 0;
   static t_fp_vector EstG;
-  static uint32_t accLPF[3];
+  static float accLPF[3];
   static uint16_t previousT;
   uint16_t currentT = micros();
   float scale, deltaGyroAngle[3];
@@ -638,31 +636,23 @@ void getEstimatedAttitude(){
   // Initialization
   for (axis = 0; axis < 3; axis++) {
     deltaGyroAngle[axis] = sysInfo.gyroData[axis]  * scale;
-    sysInfo.accSmooth[axis]  = accLPF[axis]>>ACC_LPF_FACTOR;
-    accLPF[axis]      += sysInfo.accADC[axis] - sysInfo.accSmooth[axis];
-    // used to calculate later the magnitude of acc vector
-    accMag   += sysInfo.accSmooth[axis] * sysInfo.accSmooth[axis];
-      //accLPF[axis] = accLPF[axis] * (1.0f - (1.0f/ACC_LPF_FACTOR)) + sysInfo.accADC[axis] * (1.0f/ACC_LPF_FACTOR);
-      //sysInfo.accSmooth[axis] = accLPF[axis];
+      accLPF[axis] = accLPF[axis] * (1.0f - (1.0f/ACC_LPF_FACTOR)) + sysInfo.accADC[axis] * (1.0f/ACC_LPF_FACTOR);
+      sysInfo.accSmooth[axis] = accLPF[axis];
       #define ACC_VALUE 	sysInfo.accSmooth[axis]
-    //accMag += (int32_t)ACC_VALUE*ACC_VALUE ;
+    accMag += (int32_t)ACC_VALUE*ACC_VALUE ;
   }
-  //accMag = accMag*100/((int32_t)sysInfo.acc_1G*sysInfo.acc_1G);
-  //printf("accMag: %d\n",accMag);
+  accMag = accMag*100/((int32_t)sysInfo.acc_1G*sysInfo.acc_1G);
+
   //printf("GYRO= x: %d, y: %d, z: %d\n", deltaGyroAngle[ROLL], deltaGyroAngle[PITCH], deltaGyroAngle[YAW]);
 
   rotateV(&EstG.V,deltaGyroAngle);
   //rotateV(&EstG.V,sysInfo.gyroData);
 
-  //printf("sysInfo.accSmooth[PITCH]: %d f.SMALL_ANGLES: %d\n", sysInfo.accSmooth[PITCH], f.SMALL_ANGLES_25);
-
-  if ( abs(sysInfo.accSmooth[ROLL])<800 && abs(sysInfo.accSmooth[PITCH])<800) {
+  if ( abs(sysInfo.accSmooth[ROLL])<sysInfo.acc_25deg && abs(sysInfo.accSmooth[PITCH])<sysInfo.acc_25deg && sysInfo.accSmooth[YAW]>0) {
     f.SMALL_ANGLES_25 = 1;
   } else {
     f.SMALL_ANGLES_25 = 0;
   }
-
-  //printf("sysInfo.accSmooth[PITCH]: %d f.SMALL_ANGLES: %d\n", sysInfo.accSmooth[PITCH], f.SMALL_ANGLES_25);
 
   // Apply complimentary filter (Gyro drift correction)
   // If accel magnitude >1.4G or <0.6G and ACC vector outside of the limit range => we neutralize the effect of accelerometers in the angle estimation.
@@ -673,22 +663,12 @@ void getEstimatedAttitude(){
       EstG.A[axis] = (EstG.A[axis] * GYR_CMPF_FACTOR + acc) * INV_GYR_CMPF_FACTOR;
     }
 
-  //for (axis = 0; axis < 3; axis++) {
-    //if ( (int16_t)(0.85*sysInfo.acc_1G*sysInfo.acc_1G/256) < (int16_t)(accMag>>8) && (int16_t)(accMag>>8) < (int16_t)(1.15*sysInfo.acc_1G*sysInfo.acc_1G/256) )
-     //EstG.A32[axis] += (int32_t)(sysInfo.accSmooth[axis] - EstG.A16[2*axis+1])<<(16-GYR_CMPF_FACTOR);
-    //accZ_tmp += sysInfo.accSmooth[axis] * EstG.A16[2*axis+1];
-    //#if MAG
-    //  EstM.A32[axis]  += (int32_t)(imu.magADC[axis] - EstM.A16[2*axis+1])<<(16-GYR_CMPFM_FACTOR);
-    //#endif
-  //}
-
   // Attitude of the estimated vector
-  sysInfo.angle[ROLL]  =  _atan2(EstG.V.X , -EstG.V.Z) ;
-  sysInfo.angle[PITCH] =  _atan2(EstG.V.Y , -EstG.V.Z) ;
+  sysInfo.angle[ROLL]  =  _atan2(EstG.V.X , EstG.V.Z) ;
+  sysInfo.angle[PITCH] =  _atan2(EstG.V.Y , EstG.V.Z) ;
   //sysInfo.angle[ROLL]  =  _atan2(sysInfo.gyroData[ROLL] , sysInfo.gyroData[YAW]) ;
   //sysInfo.angle[PITCH] =  _atan2(sysInfo.gyroData[PITCH] , sysInfo.gyroData[YAW]) ;
-  printf("GYRO= x: %d, y: %d, z: %d\n", sysInfo.angle[ROLL], sysInfo.angle[PITCH], sysInfo.angle[YAW]);
-  //printf("GYRO= x: %d, y: %d, z: %d\n", EstG.V.X, EstG.V.Y, EstG.V.Z);
+  //printf("GYRO= x: %f, y: %f, z: %f\n", sysInfo.angle[ROLL], sysInfo.angle[PITCH], sysInfo.angle[YAW]);
   previousT = currentT;
 }
 

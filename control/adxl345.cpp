@@ -90,7 +90,7 @@ bool Adxl345::Calibrate()
 {
 
 	cout << "ADXL 345 Calibrate" << endl;
-	int i2c_addr = 0x53; // itg3200 I2C address 
+	int i2c_addr = 0x53; // itg3200 I2C address
 
 	m_xOffset = 0;
 	m_yOffset = 0;
@@ -100,13 +100,13 @@ bool Adxl345::Calibrate()
 	unsigned char buf2[8] = {0,0,0,0,0,0,0,0};
 	int rb = 8;
 	unsigned char buf1[1] = {0x80|0x30};
-	// 0x30 is status byte, 
+	// 0x30 is status byte,
 	// 0x80| 0x 30, set auto increasement of register, so it will read 7 bytes in one commands
 	if (ioctl(file, I2C_SLAVE, i2c_addr) < 0) {
 		printf("Failed to acquire bus access and/or talk to slave.\n");
 		/* ERROR HANDLING; you can check errno to see what went wrong */
 		return false;
-	} 	
+	}
 	for(int i = 0; i < count; i ++)
 	{
 		if (write(file, buf1, 1) != 1) /* send to format data */
@@ -117,7 +117,7 @@ bool Adxl345::Calibrate()
 		}
 
 		// delay for adjusting reporting speed. Bad data without.
-		if (read(file, buf2, rb) != rb) 
+		if (read(file, buf2, rb) != rb)
 		{
 			printf("I2C Send %x Failed\n", i2c_addr);
 		}
@@ -135,17 +135,17 @@ bool Adxl345::Calibrate()
 		}
 		else
 		{
-			usleep(10000);	
+			usleep(10000);
 			i--;	// read again
 			printf(" Wrong data %d\n", buf2[0]);
 		}
 		usleep(25000);
-	
+
 	}
-		
+
 	m_xOffset = m_xOffset/count;
 	m_yOffset = m_yOffset/count;
-	m_zOffset = m_zOffset/count - 265;	// 265 is adxl calibrate data 
+	m_zOffset = m_zOffset/count - 265;	// 265 is adxl calibrate data
 	cout << "X offset: " << m_xOffset << " Y offset:" << m_yOffset << " Z offset:" << m_zOffset << endl;
 	return true;
 
@@ -153,16 +153,16 @@ bool Adxl345::Calibrate()
 // return true if data been updated correctly.
 bool Adxl345::UpdateData()
 {
-	int i2c_addr = 0x53; // itg3200 I2C address 
-	
+	int i2c_addr = 0x53; // itg3200 I2C address
+
 	if (ioctl(file, I2C_SLAVE, i2c_addr) < 0) {
 		printf("Failed to acquire bus access and/or talk to slave.\n");
 		/* ERROR HANDLING; you can check errno to see what went wrong */
 		return false;
-	} 
+	}
 	unsigned char buf2[8] = {0,0,0,0,0,0,0,0};
 	int rb = 8;
-	unsigned char buf1[1] = {0x30 | 0x80};	// read 8 bytes from 0x30, the x, y, z data start from third bytes, the first bytes is status byte 
+	unsigned char buf1[1] = {0x30 | 0x80};	// read 8 bytes from 0x30, the x, y, z data start from third bytes, the first bytes is status byte
 	if (write(file, buf1, 1) != 1) /* send to format data */
 	{
 		printf("I2C Send %x Failed\n", i2c_addr);
@@ -171,7 +171,7 @@ bool Adxl345::UpdateData()
 	}
 	//sleep(0.001);
 	// delay for adjusting reporting speed. Bad data without.
-	if (read(file, buf2, rb) != rb) 
+	if (read(file, buf2, rb) != rb)
 	{
 		printf("I2C Send %x Failed\n", i2c_addr);
 	}
@@ -184,11 +184,11 @@ bool Adxl345::UpdateData()
 		memcpy(&y1, y2, 2);
 		unsigned char z2[2] = {buf2[6], buf2[7]};
 		memcpy(&z1, z2, 2);
-		
+
 		x1 = x1 - m_xOffset;
 		y1 = y1 - m_yOffset;
 		z1 = z1 - m_zOffset;
-		
+
 		x = x1 ;
 		y = y1 ;
 		z = -z1 ;

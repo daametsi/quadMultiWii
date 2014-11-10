@@ -7,7 +7,7 @@
 //#define MINTHROTTLE 1300 // for Turnigy Plush ESCs 10A
 //#define MINTHROTTLE 1120 // for Super Simple ESCs 10A
 //#define MINTHROTTLE 1220
-#define MINTHROTTLE 1080 
+#define MINTHROTTLE 1080
 
 /* The type of multicopter */
 //#define GIMBAL
@@ -36,7 +36,7 @@
 /* should now be ok with BMA020 and BMA180 ACC */
 #define TRUSTED_ACCZ
 
-/* This will activate the ACC-Inflight calibration if unchecked */  
+/* This will activate the ACC-Inflight calibration if unchecked */
 //#define InflightAccCalibration
 
 
@@ -84,3 +84,5 @@
 #define MIDRC 1500
 
 #define SETTINGFILE	"QuadSetting"
+
+#define GYRO_SCALE ((2380 * PI)/((32767.0f / 4.0f ) * 180.0f * 1000000.0f)) //should be 2279.44 but 2380 gives better result
