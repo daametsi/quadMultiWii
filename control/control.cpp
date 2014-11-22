@@ -196,6 +196,7 @@ void writeMotors()
 	Pru.Output2 = sysInfo.motor[1]*200;
 	Pru.Output3 = sysInfo.motor[2]*200;
 	Pru.Output4 = sysInfo.motor[3]*200;
+	//printf("0: %d, 1: %d, 2: %d, 3: %d\n", Pru.Output1, Pru.Output2, Pru.Output3, Pru.Output4);
 	Pru.UpdateOutput();
 }
 
@@ -209,10 +210,15 @@ int PIDMIX(int X, int Y, int Z)
 
 void mixTable()
 {
+	//sysInfo.motor[0] = PIDMIX(-1,+1,-1); //REAR_R
+	//sysInfo.motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
+	//sysInfo.motor[2] = PIDMIX(+1,+1,+1); //REAR_L
+	//sysInfo.motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
 	sysInfo.motor[0] = PIDMIX(-1,+1,-1); //REAR_R
-	sysInfo.motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
-	sysInfo.motor[2] = PIDMIX(+1,+1,+1); //REAR_L
-	sysInfo.motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+        sysInfo.motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
+        sysInfo.motor[2] = PIDMIX(+1,+1,+1); //REAR_L
+        sysInfo.motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+	cout << "throttle " << sysInfo.rcCommand[THROTTLE] << " " << sysInfo.axisPID[ROLL] << " " << sysInfo.axisPID[PITCH]<< " " << YAW_DIRECTION * sysInfo.axisPID[YAW] << endl;
 	//cout << "throttle " << rcCommand[THROTTLE] << " " << axisPID[ROLL] << " " << axisPID[PITCH]<< " " << YAW_DIRECTION * axisPID[YAW] << endl;
 	int maxMotor=sysInfo.motor[0];
 	for(int i=1;i< NUMBER_MOTOR;i++)
@@ -471,6 +477,7 @@ void loop ()
 	for(axis=0;axis<3;axis++)
 	{
 		if (f.ACC_MODE && axis<2 ) { //LEVEL MODE
+		//if ( true && axis<2 ) { //LEVEL MODE
 		  // 50 degrees max inclination
 		  errorAngle = constrain(2*sysInfo.rcCommand[axis] + gpsVars.GPS_angle[axis],-500,+500) - sysInfo.angle[axis] + conf.angleTrim[axis]; //16 bits is ok here
 		  #ifdef LEVEL_PDF
@@ -683,11 +690,11 @@ void getEstimatedAttitude(){
   //}
 
   // Attitude of the estimated vector
-  sysInfo.angle[ROLL]  =  _atan2(EstG.V.X , -EstG.V.Z) ;
-  sysInfo.angle[PITCH] =  _atan2(EstG.V.Y , -EstG.V.Z) ;
-  //sysInfo.angle[ROLL]  =  _atan2(sysInfo.gyroData[ROLL] , sysInfo.gyroData[YAW]) ;
-  //sysInfo.angle[PITCH] =  _atan2(sysInfo.gyroData[PITCH] , sysInfo.gyroData[YAW]) ;
-  printf("GYRO= x: %d, y: %d, z: %d\n", sysInfo.angle[ROLL], sysInfo.angle[PITCH], sysInfo.angle[YAW]);
+  sysInfo.angle[ROLL]  =  -(_atan2(EstG.V.X , -EstG.V.Z)) ;
+  sysInfo.angle[PITCH] =  -(_atan2(EstG.V.Y , -EstG.V.Z)) ;
+  //sysInfo.angle[ROLL]  =  0 ;
+  //sysInfo.angle[PITCH] =  0 ;
+  //printf("GYRO= x: %d, y: %d, z: %d\n", sysInfo.angle[ROLL], sysInfo.angle[PITCH], sysInfo.angle[YAW]);
   //printf("GYRO= x: %d, y: %d, z: %d\n", EstG.V.X, EstG.V.Y, EstG.V.Z);
   previousT = currentT;
 }
@@ -802,4 +809,3 @@ int main(int argc, char ** args)
 
 	return 0;
 }
-

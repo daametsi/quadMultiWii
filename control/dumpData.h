@@ -20,8 +20,8 @@ class MemoryStream
 	Config & conf;
 void evaluateOtherData(unsigned char sr);
 void evaluateCommand() ;
-	
-	
+
+
 public :
 
 void serialCom() ;

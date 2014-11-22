@@ -188,7 +188,7 @@ void checkFirstTime()
 }
 
 
-uint8_t PWM_PIN[8] = {9,10,11,3,6,5,2, 12};   //for a quad+: rear,right,left,front   
+uint8_t PWM_PIN[8] = {9,10,11,3,6,5,2, 12};   //for a quad+: rear,right,left,front
 
 
 
@@ -294,7 +294,7 @@ void MemoryStream::evaluateCommand()
      break;
    case MSP_RC_TUNING:
 	cout << "get rc turnning" << endl;
-	
+
      headSerialReply(7);
      serialize8(conf.rcRate8);
      serialize8(conf.rcExpo8);
@@ -315,7 +315,7 @@ void MemoryStream::evaluateCommand()
      break;
    case MSP_BOX:
 	cout << "get box" << endl;
-   
+
      headSerialReply(2*CHECKBOXITEMS);
      for(uint8_t i=0;i<CHECKBOXITEMS;i++) {
        serialize16(conf.activate[i]);
@@ -333,7 +333,7 @@ void MemoryStream::evaluateCommand()
      break;
    case MSP_MISC:
 	cout << "get misc" << endl;
-   
+
      headSerialReply(2);
      serialize16(sysInfo.intPowerTrigger1);
      break;
@@ -343,8 +343,8 @@ void MemoryStream::evaluateCommand()
        serialize8(PWM_PIN[i]);
      }
      break;
- 
-	 
+
+
    case MSP_RESET_CONF:
      conf.checkNewConf++;
      checkFirstTime();
