@@ -85,4 +85,5 @@
 
 #define SETTINGFILE	"QuadSetting"
 
-#define GYRO_SCALE ((2380 * PI)/((32767.0f / 4.0f ) * 180.0f * 1000000.0f)) //should be 2279.44 but 2380 gives better result
+#define GYRO_SCALE (4 / 16.4 * PI / 180.0 / 1000000.0) //mpu6050
+//((2380 * PI)/((32767.0f / 4.0f ) * 180.0f * 1000000.0f)) //should be 2279.44 but 2380 gives better result

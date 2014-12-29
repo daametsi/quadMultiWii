@@ -196,7 +196,7 @@ void writeMotors()
 	Pru.Output2 = sysInfo.motor[1]*200;
 	Pru.Output3 = sysInfo.motor[2]*200;
 	Pru.Output4 = sysInfo.motor[3]*200;
-	//printf("0: %d, 1: %d, 2: %d, 3: %d\n", Pru.Output1, Pru.Output2, Pru.Output3, Pru.Output4);
+	//printf("0:%d\t 1:%d\t 2:%d\t 3:%d\t\n", Pru.Output1, Pru.Output2, Pru.Output3, Pru.Output4);
 	Pru.UpdateOutput();
 }
 
@@ -218,8 +218,10 @@ void mixTable()
         sysInfo.motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
         sysInfo.motor[2] = PIDMIX(+1,+1,+1); //REAR_L
         sysInfo.motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
-	cout << "throttle " << sysInfo.rcCommand[THROTTLE] << " " << sysInfo.axisPID[ROLL] << " " << sysInfo.axisPID[PITCH]<< " " << YAW_DIRECTION * sysInfo.axisPID[YAW] << endl;
+	//cout << "throttle " << sysInfo.rcCommand[THROTTLE] << " " << sysInfo.axisPID[ROLL] << " " << sysInfo.axisPID[PITCH]<< " " << YAW_DIRECTION * sysInfo.axisPID[YAW] << endl;
 	//cout << "throttle " << rcCommand[THROTTLE] << " " << axisPID[ROLL] << " " << axisPID[PITCH]<< " " << YAW_DIRECTION * axisPID[YAW] << endl;
+	//printf("rear right:\t%d\t front right:\t%d\t rear left:\t%d\t front left:\t%d\t\n", sysInfo.motor[0], sysInfo.motor[1], sysInfo.motor[2], sysInfo.motor[3]);
+	//cout << "rear left:" << sysInfo.motor[0] << " " << sysInfo.motor[1] << " " << sysInfo.motor[2] << " " << sysInfo.motor[3] << endl;
 	int maxMotor=sysInfo.motor[0];
 	for(int i=1;i< NUMBER_MOTOR;i++)
 	{
@@ -477,7 +479,8 @@ void loop ()
 	for(axis=0;axis<3;axis++)
 	{
 		if (f.ACC_MODE && axis<2 ) { //LEVEL MODE
-		//if ( true && axis<2 ) { //LEVEL MODE
+		//if ( true && axis==0 ) { //LEVEL MODE
+//cout << "level mode" << endl;
 		  // 50 degrees max inclination
 		  errorAngle = constrain(2*sysInfo.rcCommand[axis] + gpsVars.GPS_angle[axis],-500,+500) - sysInfo.angle[axis] + conf.angleTrim[axis]; //16 bits is ok here
 		  #ifdef LEVEL_PDF
@@ -492,6 +495,7 @@ void loop ()
 		}
 		else
 		{ //ACRO MODE or YAW axis
+//cout << "acro mode" << endl;
 		  if (abs(sysInfo.rcCommand[axis])<350)
 			error =          sysInfo.rcCommand[axis]<<1 ; //16 bits is needed for calculation: 350*10*8 = 28000      16 bits is ok for result if P8>2 (P>0.2)
 		  else
@@ -505,7 +509,7 @@ void loop ()
 		  ITerm = ((errorGyroI[axis]>>7)*conf.I8[axis])>>6;                                   //16 bits is ok here 16000/125 = 128 ; 128*250 = 32000
 		}
 
-		//printf("error Angle ROLL: %d error Angle PITCH: %d\n", errorAngle[ROLL], errorAngle[PITCH]);
+		//printf("error Angle ROLL: %d error Angle PITCH: %d\n", errorGyroI[ROLL], errorGyroI[PITCH]);
 
 		if (abs(sysInfo.gyroData[axis])<160)
 		{

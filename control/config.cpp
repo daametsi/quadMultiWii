@@ -48,21 +48,21 @@ bool Config::SaveToFile(char * filename)
 // load default setting
 void Config::LoadDefault()
 {
-	P8[ROLL]  = 30;  I8[ROLL] = 30; D8[ROLL]  = 23;
-	P8[PITCH] = 30; I8[PITCH] = 30; D8[PITCH] = 23;
-	P8[YAW]   = 65;  I8[YAW]  = 45;  D8[YAW]  = 0;
-	P8[PIDALT]   = 16; I8[PIDALT]   = 15; D8[PIDALT]   = 7;
+	P8[ROLL]  = 15;  I8[ROLL] = 30; D8[ROLL]  = 20;
+	P8[PITCH] = 15; I8[PITCH] = 30; D8[PITCH] = 20;
+	P8[YAW]   = 8.5;  I8[YAW]  = 0;  D8[YAW]  = 0;
+	P8[PIDALT]   = 4.7; I8[PIDALT]   = 0; D8[PIDALT]   = 0;
 
 	P8[PIDPOS]  = POSHOLD_P * 100;     I8[PIDPOS]    = POSHOLD_I * 100;       D8[PIDPOS]    = 0;
 	P8[PIDPOSR] = POSHOLD_RATE_P * 10; I8[PIDPOSR]   = POSHOLD_RATE_I * 100;  D8[PIDPOSR]   = POSHOLD_RATE_D * 1000;
 	P8[PIDNAVR] = NAV_P * 10;          I8[PIDNAVR]   = NAV_I * 100;           D8[PIDNAVR]   = NAV_D * 1000;
 
-	P8[PIDLEVEL] = 70; I8[PIDLEVEL] = 10; D8[PIDLEVEL] = 100;
+	P8[PIDLEVEL] = 9.0; I8[PIDLEVEL] = 45; D8[PIDLEVEL] = 0;
 	P8[PIDMAG] = 40;
 
 	P8[PIDVEL] = 0;  I8[PIDVEL] = 0;  D8[PIDVEL] = 0;
 
-	rcRate8 = 90; rcExpo8 = 65;
+	rcRate8 = 0.9; rcExpo8 = 65;
 	rollPitchRate = 0;
 	yawRate = 0;
 	dynThrPID = 0;
